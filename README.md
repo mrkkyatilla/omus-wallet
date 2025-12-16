@@ -1,53 +1,40 @@
-> Edited for use in IDX on 07/09/12
+# omus-wallet Kripto Cüzdan Uygulaması
 
-# Welcome to your Expo app 👋
+Bu proje, Ethereum ve Solana ağları ile etkileşim kurabilen bir mobil kripto cüzdan uygulamasıdır. React Native (Expo) kullanılarak geliştirilmiştir.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Kurulum
 
-## Get started
+Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
 
-#### Android
+1.  **Projeyi Klonlayın:**
+    ```bash
+    git clone https://github.com/mrkkyatilla/omus-wallet.git
+    cd omus-wallet
+    ```
 
-Android previews are defined as a `workspace.onStart` hook and started as a vscode task when the workspace is opened/started.
+2.  **Gerekli Paketleri Yükleyin:**
+    ```bash
+    npm install
+    ```
 
-Note, if you can't find the task, either:
-- Rebuild the environment (using command palette: `IDX: Rebuild Environment`), or
-- Run `npm run android -- --tunnel` command manually run android and see the output in your terminal. The device should pick up this new command and switch to start displaying the output from it.
+3.  **Ortam Değişkenlerini Ayarlayın (ÇOK ÖNEMLİ):**
+    Projenin düzgün çalışabilmesi için Ethereum (Infura) ve Solana (RPC) bağlantılarına ihtiyacı vardır.
+    - Proje kök dizininde `.env.example` dosyasını kopyalayarak `.env` adında yeni bir dosya oluşturun.
+    - Oluşturduğunuz `.env` dosyasını açın ve kendi API anahtarlarınızı girin:
 
-In the output of this command/task, you'll find options to open the app in a
+    ```
+    EXPO_PUBLIC_INFURA_ID="YOUR_INFURA_ID_HERE"
+    EXPO_PUBLIC_SOLANA_RPC="YOUR_SOLANA_RPC_URL_HERE"
+    ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+4.  **Uygulamayı Başlatın:**
+    Uygulamayı başlatmak ve test için bir tünel oluşturmak üzere aşağıdaki komutu çalıştırın:
+    ```bash
+    npm run tunnel
+    ```
+    Terminalde görünecek olan QR kodu iOS veya Android telefonunuzdaki Expo Go uygulaması ile okutarak uygulamayı canlı olarak test edebilirsiniz.
 
-You'll also find options to open the app's developer menu, reload the app, and more.
+## Olası Sorunlar
 
-#### Web
-
-Web previews will be started and managred automatically. Use the toolbar to manually refresh.
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+-   **Ortam Değişkenleri Eksikliği:** Eğer `.env` dosyasını oluşturmaz veya içindeki değişkenleri ayarlamazsanız, uygulama halka açık ve limitli RPC endpoint'lerini kullanacaktır. Bu durum, uygulamanın performansını ve güvenilirliğini olumsuz etkileyebilir. Konsolda bu konuyla ilgili uyarılar görebilirsiniz.
+-   **Paket Uyuşmazlıkları:** `npm install` sonrası hata alırsanız, `node_modules` klasörünü ve `package-lock.json` dosyasını silip `npm install` komutunu tekrar çalıştırmayı deneyin.
