@@ -47,9 +47,11 @@ const AppLayout = () => {
 
   return (
     <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
-      <Stack.Screen name="(wallet)" />
-      <Stack.Screen name="(auth)/lock-screen" options={{ gestureEnabled: false }} />
-      <Stack.Screen name="+not-found" />
+        <Stack.Screen name="(wallet)" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen name="(auth)/lock-screen" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="+not-found" />
     </Stack>
   );
 };
