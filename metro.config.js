@@ -1,5 +1,6 @@
 
 const { getDefaultConfig } = require('expo/metro-config');
+const path = require('path');
 
 const config = getDefaultConfig(__dirname, {
   isCSSEnabled: true,
@@ -16,5 +17,21 @@ config.resolver.extraNodeModules = {
   buffer: require.resolve('buffer'),
   process: require.resolve('process/browser'),
 };
+
+// This is the new part to prepend the shim.js file
+const projectRoot = __dirname;
+config.transformer.getTransformOptions = async () => ({
+  transform: {
+    experimentalImportSupport: false,
+    inlineRequires: true,
+  },
+  prelude: `
+    try {
+      require("${path.resolve(projectRoot, 'shim.js')}");
+    } catch (e) {
+      console.error("Could not load shim.js", e);
+    }
+  `,
+});
 
 module.exports = config;
