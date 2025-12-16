@@ -28,7 +28,7 @@ const AppLayout = () => {
     SplashScreen.hideAsync();
 
   }, [isUnlocked, hasPin, segments, router]);
-
+ 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
       if (nextAppState.match(/inactive|background/)) {
