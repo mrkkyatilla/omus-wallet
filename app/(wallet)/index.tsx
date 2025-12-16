@@ -3,7 +3,6 @@ import { Image } from 'expo-image';
 import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import {
-  LucideArrowLeft,
   LucideArrowUpRight,
   LucideBookUser,
   LucideDownload,
@@ -11,7 +10,7 @@ import {
   LucideWallet,
 } from 'lucide-react-native';
 import { useState } from 'react';
-import { RefreshControl, ScrollView, View, Pressable, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Pressable, RefreshControl, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
@@ -31,6 +30,7 @@ export default function WalletScreen() {
 
   const totalUsdBalance = assets.reduce((acc, asset) => acc + (asset.balance * asset.usdValue || 0), 0);
 
+  // Show loading indicator only on the initial load when assets are empty
   if (loading && assets.length === 0) {
     return (
       <ThemedView className="flex-1 items-center justify-center bg-slate-950">
@@ -45,76 +45,100 @@ export default function WalletScreen() {
       <StatusBar style="light" />
       <ScrollView
         className="flex-1"
+        // This contentContainerStyle ensures the background color is consistent even when content is short
+        contentContainerStyle={{ flexGrow: 1 }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#fff" />}>
         <View style={{ paddingTop: insets.top }} className="px-4">
-          {/* Header, Balance, and Action Buttons */}
+          {/* Header */}
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-x-2">
               <Image source={{ uri: 'https://github.com/Mrk-Kky.png' }} className="h-8 w-8 rounded-full" />
               <ThemedText className="text-white">omus-wallet</ThemedText>
             </View>
-            <Pressable>
-              <LucideBookUser color="white" />
-            </Pressable>
+            <Link href="/(wallet)/address-book" asChild>
+              <Pressable>
+                <LucideBookUser color="white" />
+              </Pressable>
+            </Link>
           </View>
 
+          {/* Balance */}
           <View className="items-center py-8">
             <ThemedText className="text-lg text-slate-400">Total Balance</ThemedText>
-            <ThemedText className="text-5xl font-bold text-white">${totalUsdBalance.toFixed(2)}</ThemedText>
+            <ThemedText className="text-5xl font-bold text-white">
+              ${totalUsdBalance.toFixed(2)}
+            </ThemedText>
           </View>
 
+          {/* Action Buttons */}
           <View className="flex-row justify-around">
-            <View className="items-center gap-y-2">
-              <Pressable className="h-16 w-16 items-center justify-center rounded-full bg-blue-500">
-                <LucideSend color="white" />
+            <Link href="/(wallet)/send" asChild>
+              <Pressable className="items-center gap-y-2">
+                <View className="h-16 w-16 items-center justify-center rounded-full bg-blue-500">
+                  <LucideSend color="white" />
+                </View>
+                <ThemedText className="font-bold text-white">Send</ThemedText>
               </Pressable>
-              <ThemedText className="font-bold text-white">Send</ThemedText>
-            </View>
-            <View className="items-center gap-y-2">
-              <Pressable className="h-16 w-16 items-center justify-center rounded-full bg-blue-500">
-                <LucideDownload color="white" />
+            </Link>
+            <Link href="/(wallet)/receive" asChild>
+              <Pressable className="items-center gap-y-2">
+                <View className="h-16 w-16 items-center justify-center rounded-full bg-blue-500">
+                  <LucideDownload color="white" />
+                </View>
+                <ThemedText className="font-bold text-white">Receive</ThemedText>
               </Pressable>
-              <ThemedText className="font-bold text-white">Receive</ThemedText>
-            </View>
-            <View className="items-center gap-y-2">
-              <Pressable className="h-16 w-16 items-center justify-center rounded-full bg-blue-500">
+            </Link>
+            {/* 'Buy' button can be linked later when functionality is added */}
+            <Pressable className="items-center gap-y-2 opacity-50">
+              <View className="h-16 w-16 items-center justify-center rounded-full bg-slate-700">
                 <LucideWallet color="white" />
-              </Pressable>
+              </View>
               <ThemedText className="font-bold text-white">Buy</ThemedText>
-            </View>
+            </Pressable>
           </View>
         </View>
 
-        <View className="flex-1 pt-8">
+        {/* Use a View with flexGrow to push content apart */}
+        <View className="flex-1 justify-between pt-8">
           {/* Asset List */}
           <View className="px-4">
-            {assets.map((asset) => (
-              <View key={asset.id} className="mb-4 flex-row items-center justify-between">
-                <View className="flex-row items-center gap-x-4">
-                  <Image source={{ uri: asset.icon }} className="h-10 w-10 rounded-full" />
-                  <View>
-                    <ThemedText className="font-bold text-white">{asset.name}</ThemedText>
-                    <ThemedText className="text-sm text-slate-400">{asset.symbol}</ThemedText>
+            {assets.length > 0 ? (
+              assets.map((asset) => (
+                <View key={asset.id} className="mb-4 flex-row items-center justify-between">
+                  <View className="flex-row items-center gap-x-4">
+                    <Image source={{ uri: asset.icon }} className="h-10 w-10 rounded-full" />
+                    <View>
+                      <ThemedText className="font-bold text-white">{asset.name}</ThemedText>
+                      <ThemedText className="text-sm text-slate-400">{asset.symbol}</ThemedText>
+                    </View>
+                  </View>
+                  <View className="items-end">
+                    <ThemedText className="font-bold text-white">
+                      {asset.balance.toFixed(4)} {asset.symbol}
+                    </ThemedText>
+                    <ThemedText className="text-sm text-slate-400">
+                      ${(asset.balance * asset.usdValue).toFixed(2)}
+                    </ThemedText>
                   </View>
                 </View>
-                <View className="items-end">
-                  <ThemedText className="font-bold text-white">
-                    {asset.balance.toFixed(4)} {asset.symbol}
-                  </ThemedText>
-                  <ThemedText className="text-sm text-slate-400">
-                    ${(asset.balance * asset.usdValue).toFixed(2)}
-                  </ThemedText>
-                </View>
+              ))
+            ) : (
+              <View className="py-8">
+                <ThemedText className="text-center text-slate-500">No assets found.</ThemedText>
+                <ThemedText className="mt-2 text-center text-xs text-slate-600">
+                  Pull down to refresh or check your RPC settings.
+                </ThemedText>
               </View>
-            ))}
+            )}
           </View>
 
           {/* Transaction History */}
-          <View className="px-4 pt-8">
+          <View className="px-4 pb-8 pt-4">
             <ThemedText className="mb-4 text-white">Transaction History</ThemedText>
             {transactions.length > 0 ? (
               transactions.map((tx) => {
-                const isSender = tx.sender === solanaWallet?.publicKey.toBase58() || tx.sender === ethereumWallet?.address;
+                const isSender =
+                  tx.sender === solanaWallet?.publicKey.toBase58() || tx.sender === ethereumWallet?.address;
                 const amount = typeof tx.amount === 'string' ? parseFloat(tx.amount).toFixed(4) : tx.amount.toFixed(4);
                 const transactionData = { ...tx, isSender, amount };
 
