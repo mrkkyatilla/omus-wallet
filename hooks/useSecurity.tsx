@@ -1,7 +1,7 @@
 
 import * as LocalAuthentication from 'expo-local-authentication';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import * as Keychain from 'react-native-keychain';
+import * as SecureStore from 'expo-secure-store';
 
 const PIN_KEY = 'user_pin';
 
@@ -32,7 +32,7 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
   useEffect(() => {
     const checkPin = async () => {
       try {
-        const pin = await Keychain.getGenericPassword({ service: PIN_KEY });
+        const pin = await SecureStore.getItemAsync(PIN_KEY);
         setHasPin(!!pin);
         // App is locked by default
         setIsUnlocked(false);
@@ -53,7 +53,7 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
 
   const setPin = async (pin: string) => {
     try {
-      await Keychain.setGenericPassword('user', pin, { service: PIN_KEY });
+      await SecureStore.setItemAsync(PIN_KEY, pin);
       setHasPin(true);
       setIsUnlocked(true);
       return true;
@@ -65,8 +65,8 @@ export const SecurityProvider = ({ children }: { children: React.ReactNode }) =>
 
   const verifyPin = async (pin: string) => {
     try {
-      const credentials = await Keychain.getGenericPassword({ service: PIN_KEY });
-      if (credentials && credentials.password === pin) {
+      const storedPin = await SecureStore.getItemAsync(PIN_KEY);
+      if (storedPin && storedPin === pin) {
         setIsUnlocked(true);
         return true;
       }
