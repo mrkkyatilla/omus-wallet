@@ -1,24 +1,66 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+
+import { Stack, useRouter, useSegments } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+import { AppState } from 'react-native';
 import 'react-native-reanimated';
+import Toast from 'react-native-toast-message';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { SecurityProvider, useSecurity } from '@/hooks/useSecurity';
+import { WalletProvider, useWallet } from '@/hooks/useWallet';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
+SplashScreen.preventAutoHideAsync();
+
+const AppLayout = () => {
+  const router = useRouter();
+  const segments = useSegments();
+  const { isUnlocked, hasPin, lock } = useSecurity();
+  const { refreshData } = useWallet(); // Get the refresh function
+
+  useEffect(() => {
+    const inAuthGroup = segments[0] === '(auth)';
+
+    if (hasPin && !isUnlocked && !inAuthGroup) {
+      router.replace('/(auth)/lock-screen');
+    } else if ((isUnlocked || !hasPin) && inAuthGroup) {
+      router.replace('/(wallet)');
+    }
+    SplashScreen.hideAsync();
+
+  }, [isUnlocked, hasPin, segments, router]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      if (nextAppState.match(/inactive|background/)) {
+        lock();
+      } else if (nextAppState === 'active') {
+        console.log('App is active, refreshing data...');
+        refreshData();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [lock, refreshData]);
+
+  return (
+    <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+      <Stack.Screen name="(wallet)" />
+      <Stack.Screen name="(auth)/lock-screen" options={{ gestureEnabled: false }} />
+      <Stack.Screen name="+not-found" />
+    </Stack>
+  );
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SecurityProvider>
+      <WalletProvider>
+        <AppLayout />
+        <Toast />
+      </WalletProvider>
+    </SecurityProvider>
   );
 }
