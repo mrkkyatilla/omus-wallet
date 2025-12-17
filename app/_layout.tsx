@@ -1,3 +1,4 @@
+import '../global.css';
 import "react-native-get-random-values"; // BU EN ÜSTTE OLMALI!
 
 import { Stack, useRouter, useSegments } from 'expo-router';
