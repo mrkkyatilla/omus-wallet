@@ -1,5 +1,3 @@
-İstediğiniz `README.md` dosya içeriğinin İngilizce çevirisi aşağıdadır. Kopyalama butonunu kullanarak doğrudan projenize ekleyebilirsiniz:
-
 ```markdown
 # omus-wallet Crypto Wallet Application
 
