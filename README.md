@@ -1,40 +1,56 @@
-# omus-wallet Kripto Cüzdan Uygulaması
+İstediğiniz `README.md` dosya içeriğinin İngilizce çevirisi aşağıdadır. Kopyalama butonunu kullanarak doğrudan projenize ekleyebilirsiniz:
 
-Bu proje, Ethereum ve Solana ağları ile etkileşim kurabilen bir mobil kripto cüzdan uygulamasıdır. React Native (Expo) kullanılarak geliştirilmiştir.
+```markdown
+# omus-wallet Crypto Wallet Application
 
-## Kurulum
+This project is a mobile crypto wallet application capable of interacting with Ethereum and Solana networks. It is developed using React Native (Expo).
 
-Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin:
+## Installation
 
-1.  **Projeyi Klonlayın:**
-    ```bash
-    git clone https://github.com/mrkkyatilla/omus-wallet.git
-    cd omus-wallet
-    ```
+Follow the steps below to run the project on your local machine:
 
-2.  **Gerekli Paketleri Yükleyin:**
-    ```bash
-    npm install
-    ```
+1. **Clone the Project:**
+   ```bash
+   git clone [https://github.com/mrkkyatilla/omus-wallet.git](https://github.com/mrkkyatilla/omus-wallet.git)
+   cd omus-wallet
 
-3.  **Ortam Değişkenlerini Ayarlayın (ÇOK ÖNEMLİ):**
-    Projenin düzgün çalışabilmesi için Ethereum (Infura) ve Solana (RPC) bağlantılarına ihtiyacı vardır.
-    - Proje kök dizininde `.env.example` dosyasını kopyalayarak `.env` adında yeni bir dosya oluşturun.
-    - Oluşturduğunuz `.env` dosyasını açın ve kendi API anahtarlarınızı girin:
+```
 
-    ```
-    EXPO_PUBLIC_INFURA_ID="YOUR_INFURA_ID_HERE"
-    EXPO_PUBLIC_SOLANA_RPC="YOUR_SOLANA_RPC_URL_HERE"
-    ```
+2. **Install Required Packages:**
+```bash
+npm install
 
-4.  **Uygulamayı Başlatın:**
-    Uygulamayı başlatmak ve test için bir tünel oluşturmak üzere aşağıdaki komutu çalıştırın:
-    ```bash
-    npm run tunnel
-    ```
-    Terminalde görünecek olan QR kodu iOS veya Android telefonunuzdaki Expo Go uygulaması ile okutarak uygulamayı canlı olarak test edebilirsiniz.
+```
 
-## Olası Sorunlar
 
--   **Ortam Değişkenleri Eksikliği:** Eğer `.env` dosyasını oluşturmaz veya içindeki değişkenleri ayarlamazsanız, uygulama halka açık ve limitli RPC endpoint'lerini kullanacaktır. Bu durum, uygulamanın performansını ve güvenilirliğini olumsuz etkileyebilir. Konsolda bu konuyla ilgili uyarılar görebilirsiniz.
--   **Paket Uyuşmazlıkları:** `npm install` sonrası hata alırsanız, `node_modules` klasörünü ve `package-lock.json` dosyasını silip `npm install` komutunu tekrar çalıştırmayı deneyin.
+3. **Set Up Environment Variables (VERY IMPORTANT):**
+The project requires Ethereum (Infura) and Solana (RPC) connections to function properly.
+* Copy the `.env.example` file in the project root directory and create a new file named `.env`.
+* Open the newly created `.env` file and enter your own API keys:
+
+
+```env
+EXPO_PUBLIC_INFURA_ID="YOUR_INFURA_ID_HERE"
+EXPO_PUBLIC_SOLANA_RPC="YOUR_SOLANA_RPC_URL_HERE"
+
+```
+
+
+4. **Start the Application:**
+Run the following command to start the application and create a tunnel for testing:
+```bash
+npm run tunnel
+
+```
+
+
+You can test the application live by scanning the QR code that appears in the terminal using the Expo Go application on your iOS or Android phone.
+
+## Potential Issues
+
+* **Missing Environment Variables:** If you do not create the `.env` file or configure the variables inside it, the application will use public and limited RPC endpoints. This may negatively impact the application's performance and reliability. You might see related warnings in the console.
+* **Package Mismatches:** If you encounter an error after running `npm install`, try deleting the `node_modules` folder and the `package-lock.json` file, then run the `npm install` command again.
+
+```
+
+```
